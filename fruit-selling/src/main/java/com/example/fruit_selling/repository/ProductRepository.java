@@ -17,5 +17,8 @@ public interface ProductRepository extends JpaRepository<Product,String> {
     List<Product> findSimpleProducts();
 
     List<Product> findTop5ByOrderByIdDesc();
+
+    @Query("SELECT p.quantity FROM Product p WHERE p.id = :id")
+    Integer getProductQuantityById(String id);
 }
 

@@ -1,5 +1,6 @@
 package com.example.fruit_selling.service;
 
+import com.example.fruit_selling.dto.ProductDTO;
 import com.example.fruit_selling.dto.ProductSimpleDTO;
 import com.example.fruit_selling.projection.ProductProjection;
 import com.example.fruit_selling.model.Product;
@@ -20,8 +21,21 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
-    public Product getProductById(String id){
-        return productRepository.findById(id).orElse(null);
+    public ProductDTO getProductById(String id) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Sản phẩm không tồn tại!"));
+        return new ProductDTO(product, String.format(FIREBASE_STORAGE_URL, FIREBASE_BUCKET, id));
+    }
+
+    public ProductSimpleDTO getProductSimpleById(String id){
+        Product product = productRepository.findById(id).orElse(null);
+        if(product == null) return null;
+        return new ProductSimpleDTO(product.getId(),
+                                    product.getName(),
+                                    product.getPrice(),
+                                    product.getQuantity(),
+                                    product.getUnit().getName(),
+                                    String.format(FIREBASE_STORAGE_URL, FIREBASE_BUCKET, id));
     }
 
     public List<Product> getAll(){
@@ -33,7 +47,7 @@ public class ProductService {
 
         return products.stream().map(product ->
                 new ProductSimpleDTO(
-                        product.getId().toString(),  // Chuyển ID sang String
+                        product.getId(),  // Chuyển ID sang String
                         product.getName(),
                         product.getPrice(),
                         product.getQuantity(),
@@ -57,5 +71,9 @@ public class ProductService {
                         String.format(FIREBASE_STORAGE_URL, FIREBASE_BUCKET, product.getId()) // Chuyển đổi URL ảnh
                 )
         ).collect(Collectors.toList());
+    }
+
+    public Integer getProductQuantityById(String id){
+        return productRepository.getProductQuantityById(id);
     }
 }

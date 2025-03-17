@@ -1,5 +1,7 @@
 package com.example.fruit_selling.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -29,16 +31,19 @@ public class Product {
     private Long price;
 
    // @Column(name = "category_id", nullable = false)
+   @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
 
     //@Column(name = "unit_id", nullable = false)
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "unit_id")
     private Unit unit;
 
     //@Column(name = "brand_id", nullable = false)
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "brand_id")
     private Brand brand;
@@ -52,6 +57,7 @@ public class Product {
     @Column(name="last_update",nullable = false)
     private LocalDateTime lastUpdate;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name ="employee_id")
     private Employee employee;
@@ -59,9 +65,11 @@ public class Product {
     @Column(name="flag",nullable = false)
     private boolean flag;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private Collection<OrderItem> orders;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private Collection<ProductNutrient> nutrients;
 

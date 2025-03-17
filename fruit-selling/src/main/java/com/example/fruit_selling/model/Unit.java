@@ -1,5 +1,6 @@
 package com.example.fruit_selling.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.Collection;
@@ -17,6 +18,7 @@ public class Unit {
     @Column(name="flag",nullable = false)
     private boolean flag;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "unit",fetch = FetchType.LAZY)
     private Collection<Product> products;
 

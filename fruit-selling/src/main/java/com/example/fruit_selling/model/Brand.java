@@ -1,5 +1,6 @@
 package com.example.fruit_selling.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -24,6 +25,7 @@ public class Brand {
     @Column(name="created_at",updatable = false, nullable = false)
     private LocalDateTime createAt;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "brand",fetch =  FetchType.LAZY)
     private Collection<Product> products;
 

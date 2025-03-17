@@ -1,5 +1,6 @@
 package com.example.fruit_selling.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -24,7 +25,7 @@ public class Category {
     @Column(name="flag",nullable = false)
     private boolean flag;
 
-
+    @JsonManagedReference
     @OneToMany(mappedBy = "category",fetch = FetchType.LAZY)
     private Collection<Product> products;
 

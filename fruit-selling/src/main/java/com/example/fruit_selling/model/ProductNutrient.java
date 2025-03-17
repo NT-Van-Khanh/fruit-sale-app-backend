@@ -1,5 +1,6 @@
 package com.example.fruit_selling.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -11,6 +12,7 @@ public class ProductNutrient {
     private String id;
 
     //@Column(name = "product_id", nullable = false)
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
