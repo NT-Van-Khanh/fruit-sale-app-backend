@@ -1,65 +1,64 @@
 package com.example.fruit_selling.controller;
 
-import com.example.fruit_selling.dto.ProductDTO;
-import com.example.fruit_selling.dto.ProductSimpleDTO;
-import com.example.fruit_selling.projection.ProductProjection;
-import com.example.fruit_selling.model.Product;
+import com.example.fruit_selling.dto.*;
 import com.example.fruit_selling.service.ProductService;
+import jakarta.validation.constraints.NotBlank;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
-//@CrossOrigin(origins = "http://localhost:5173")
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/products")
 public class ProductController {
     private final ProductService productService;
 
+    @Autowired
     public ProductController(ProductService productService) {
         this.productService = productService;
     }
 
-    @GetMapping("/products")
-    public ResponseEntity<List<ProductSimpleDTO>> getAllProduct() {
-        return ResponseEntity.ok(productService.getProductsForHomepage());
+    @GetMapping("/all")
+    public ResponseEntity<ApiResponse<List<ProductSimpleDTO>>> getAllProduct() {
+        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK,productService.getProductsForHomepage()));
     }
 
 
-    @GetMapping("/products/top-5-product")
-    public  ResponseEntity<List<ProductSimpleDTO>>  get5Product(){
-        return ResponseEntity.ok(productService.getTop5Product());
-    }
-//
-//    @GetMapping("/homepage")
-//    public ResponseEntity<List<ProductProjection>> getProductForHomePage(){
-//        return ResponseEntity.ok(productService.getProductsForHomepage());
-//    }
-
-
-    @GetMapping("/products/homepage")
-    public ResponseEntity<List<ProductSimpleDTO>> getProductForHomePage() {
-        return ResponseEntity.ok(productService.getProductsForHomepage());
+    @GetMapping("/top-5-product")
+    public  ResponseEntity<ApiResponse<List<ProductSimpleDTO>>>  get5Product(){
+        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK,productService.getTop5Product()));
     }
 
-    @GetMapping("/product/{id}")
-    public ResponseEntity<ProductDTO> getProductById(@PathVariable String id){
-        return ResponseEntity.ok(productService.getProductById(id));
+
+    @GetMapping("/homepage")
+    public ResponseEntity<ApiResponse<List<ProductSimpleDTO>>> getProductForHomePage() {
+        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK,productService.getProductsForHomepage()));
     }
 
-    @GetMapping("/product/simple/{id}")
-    public ResponseEntity<ProductSimpleDTO> getProductSimpleById(@PathVariable String id){
-        return ResponseEntity.ok(productService.getProductSimpleById(id));
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse<ProductDTO>> getProductById(@PathVariable String id){
+        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK,productService.getProductById(id)));
     }
 
-    @GetMapping("/product/check-stock/{id}")
-    public ResponseEntity<Integer> getProductQuantityById(@PathVariable String id) {
-        Integer quantity = productService.getProductQuantityById(id);
+    @GetMapping("/simple/{id}")
+    public ResponseEntity<ApiResponse<ProductSimpleDTO>> getProductSimpleById(@PathVariable String id){
+        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK,productService.getProductSimpleById(id)));
+    }
 
-        if (quantity == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body(0); // Trả về 0 và mã 404 nếu sản phẩm không tồn tại
+    @GetMapping("/check-stock/{id}")
+    public ResponseEntity<ApiResponse<Integer>> getProductQuantityById(@PathVariable String id) {
+        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, productService.getProductQuantityById(id)));
+    }
 
-        return ResponseEntity.ok(quantity); // Trả về số lượng tồn kho với mã 200 OK
+    @GetMapping("/search")
+    public ResponseEntity<ApiResponse<PageResponse<ProductSimpleDTO>>> searchProducts (
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) String categoryId,
+            @RequestParam(required = false) String brandId, @ModelAttribute Page pageRequest){
+        PageResponse<ProductSimpleDTO> page = productService.searchProducts(keyword,categoryId,brandId,pageRequest);
+        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, page));
+
     }
 }

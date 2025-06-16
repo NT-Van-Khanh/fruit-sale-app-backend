@@ -1,13 +1,18 @@
 package com.example.fruit_selling.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
-
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Entity
 @Table(name = "Order_product")
 public class OrderProduct {
@@ -93,9 +98,6 @@ public class OrderProduct {
         return items.size();
     }
 
-
-    public OrderProduct() {
-    }
 
     public String getAddress() {
         return address;

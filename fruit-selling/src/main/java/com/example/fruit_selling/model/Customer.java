@@ -1,6 +1,9 @@
 package com.example.fruit_selling.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -10,6 +13,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Collection;
 
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name="Customer")
 public class Customer {
@@ -54,10 +60,7 @@ public class Customer {
 
     @OneToMany(mappedBy = "customer",fetch = FetchType.EAGER)
     private Collection<OrderProduct> orders;
-
-    public Customer() {
-    }
-
+    
 
     public String getFormattedCreateAt() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy");
