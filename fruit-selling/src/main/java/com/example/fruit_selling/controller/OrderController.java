@@ -6,21 +6,24 @@ import com.example.fruit_selling.dto.OrderResponseDTO;
 import com.example.fruit_selling.dto.ProductSimpleDTO;
 import com.example.fruit_selling.repository.OrderRepository;
 import com.example.fruit_selling.service.OrderService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Validated
 @RequestMapping("/api/orders")
 @RestController
 public class OrderController {
     @Autowired
     private OrderService orderService;
     @PostMapping("/add")
-    public ResponseEntity<ApiResponse<OrderResponseDTO>> addOrder(@RequestBody OrderDTO order){
+    public ResponseEntity<ApiResponse<OrderResponseDTO>> addOrder(@RequestBody @Valid OrderDTO order){
         ApiResponse<OrderResponseDTO> apiResponse = new ApiResponse<>(HttpStatus.CREATED.value(), "Tạo đơn hàng thành công", orderService.addOrder(order));
         return ResponseEntity.status(HttpStatus.CREATED).body(apiResponse);
     }
