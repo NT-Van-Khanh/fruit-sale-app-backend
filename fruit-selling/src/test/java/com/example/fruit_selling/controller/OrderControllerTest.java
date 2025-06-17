@@ -44,7 +44,7 @@ class OrderControllerTest {
         customer.setFirstName(" A");
         customer.setEmail("a@example.com");
         customer.setPhone("0123456789");
-
+        customer.setAddress("123 Trần Phú, Hà Nội");
         OrderItemDTO item = new OrderItemDTO();
         item.setProductId("SP001");
         item.setQuantity(2);
