@@ -15,7 +15,9 @@ import com.example.fruit_selling.service.OrderService;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.NoSuchElementException;
+import java.util.UUID;
 
 
 @Service
@@ -35,10 +37,13 @@ public class OrderServiceImpl implements OrderService {
         if (orderDTO.getItems() == null || orderDTO.getItems().isEmpty()) {
             throw new IllegalArgumentException("Đơn hàng phải có ít nhất một sản phẩm.");
         }
-        Customer customer = customerService.add(orderDTO.getCustomer());
+
+        Customer customer = customerService.addOrGetExisting(orderDTO.getCustomer());
 
         OrderProduct order = OrderMapper.toOrder(orderDTO);
+        order.setId(generateOrderId());
         order.setCustomer(customer);
+        order.setItems(new ArrayList<>());
         order = orderRepository.save(order);
 
         for(OrderItemDTO item : orderDTO.getItems()){
@@ -48,6 +53,10 @@ public class OrderServiceImpl implements OrderService {
         return getOrderById(order.getId());
     }
 
+    private String generateOrderId() {
+        long count = orderRepository.count() + 1;
+        return String.format("HD%06d", count); // VD: HD00001
+    }
     @Override
     public PageResponse<OrderResponseDTO> getOrdersByEmail(String email, String otp) {
         return null;

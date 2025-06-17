@@ -37,9 +37,13 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public PageResponse<ProductSimpleDTO> searchProducts(String keyword, String categoryId, String brandId, Page pageRequest) {
+    public PageResponse<ProductSimpleDTO> searchProducts(String keyword, String categoryId, String brandId,
+                                                         Long minPrice, Long maxPrice, Page pageRequest) {
+        if (minPrice == null) minPrice = 0L;
+        if (maxPrice == null) maxPrice = Long.MAX_VALUE;
         Pageable pageable = pageRequest.toPageable();
-        org.springframework.data.domain.Page<Product> page = productRepository.searchProducts(keyword, categoryId, brandId, pageable);
+        org.springframework.data.domain.Page<Product> page = productRepository.searchProducts(keyword, categoryId, brandId,
+                                                                        minPrice, maxPrice, pageable);
         List<ProductSimpleDTO> productSimpleDTOS = page.getContent().stream()
                 .map(ProductMapper::toSimpleDTO)
                 .collect(Collectors.toList());

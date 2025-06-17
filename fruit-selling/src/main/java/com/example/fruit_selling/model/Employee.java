@@ -1,13 +1,18 @@
 package com.example.fruit_selling.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
-
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name="Employee")
 public class Employee {
@@ -35,7 +40,7 @@ public class Employee {
     private LocalDate birthday;
 
     @Column(name="gender")
-    private String gender;
+    private Boolean gender;
 
     @CreationTimestamp
     @Column(name="created_at",updatable = false, nullable = false)
@@ -54,8 +59,7 @@ public class Employee {
         return lastName + " " +  firstName;
     }
 
-    public Employee() {
-    }
+
 
     public String getPassword() {
         return password;
@@ -113,11 +117,11 @@ public class Employee {
         this.birthday = birthday;
     }
 
-    public String getGender() {
+    public Boolean getGender() {
         return gender;
     }
 
-    public void setGender(String gender) {
+    public void setGender(Boolean gender) {
         this.gender = gender;
     }
 

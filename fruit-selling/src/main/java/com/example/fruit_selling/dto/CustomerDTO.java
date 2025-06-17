@@ -1,5 +1,6 @@
 package com.example.fruit_selling.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -29,4 +30,8 @@ public class CustomerDTO {
     @NotBlank(message = "Email không được để trống")
     @Email(message = "Email không hợp lệ")
     private String email;
+
+    @NotBlank(message = "Địa chỉ không được để trống")
+    @Schema(description = "Địa chỉ giao hàng", example = "123 Trần Phú, Hà Nội")
+    private String address;
 }

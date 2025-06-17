@@ -10,6 +10,7 @@ public class CustomerMapper {
                 .firstName(customer.getFirstName())
                 .phone(customer.getPhone())
                 .email(customer.getEmail())
+                .address(customer.getAddress())
                 .build();
     }
 
@@ -19,6 +20,7 @@ public class CustomerMapper {
                 .firstName(dto.getFirstName())
                 .phone(dto.getPhone())
                 .email(dto.getEmail())
+                .address(dto.getAddress())
                 .build();
     }
 }

@@ -5,4 +5,5 @@ import com.example.fruit_selling.model.Customer;
 
 public interface CustomerService {
     Customer add(CustomerDTO customerDTO);
+    Customer addOrGetExisting(CustomerDTO dto);
 }

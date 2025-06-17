@@ -56,9 +56,16 @@ public class ProductController {
     public ResponseEntity<ApiResponse<PageResponse<ProductSimpleDTO>>> searchProducts (
             @RequestParam(required = false) String keyword,
             @RequestParam(required = false) String categoryId,
-            @RequestParam(required = false) String brandId, @ModelAttribute Page pageRequest){
-        PageResponse<ProductSimpleDTO> page = productService.searchProducts(keyword,categoryId,brandId,pageRequest);
+            @RequestParam(required = false) String brandId,
+            @RequestParam(required = false) Long minPrice,
+            @RequestParam(required = false) Long maxPrice,
+            @ModelAttribute Page pageRequest){
+        PageResponse<ProductSimpleDTO> page = productService.searchProducts(keyword,
+                categoryId,
+                brandId,
+                minPrice,
+                maxPrice,
+                pageRequest);
         return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, page));
-
     }
 }

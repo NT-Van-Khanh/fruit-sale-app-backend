@@ -3,18 +3,13 @@ package com.example.fruit_selling.controller;
 import com.example.fruit_selling.dto.ApiResponse;
 import com.example.fruit_selling.dto.OrderDTO;
 import com.example.fruit_selling.dto.OrderResponseDTO;
-import com.example.fruit_selling.dto.ProductSimpleDTO;
-import com.example.fruit_selling.repository.OrderRepository;
 import com.example.fruit_selling.service.OrderService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Validated
 @RequestMapping("/api/orders")
@@ -28,7 +23,7 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.CREATED).body(apiResponse);
     }
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<OrderResponseDTO>> addOrder(@PathVariable String id){
-        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.CREATED, orderService.getOrderById(id)));
+    public ResponseEntity<ApiResponse<OrderResponseDTO>> getOrder(@PathVariable String id){
+        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, orderService.getOrderById(id)));
     }
 }

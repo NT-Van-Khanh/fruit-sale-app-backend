@@ -27,11 +27,11 @@ public class OrderResponseDTO {
 
     public String getFormattedCreateAt() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy");
-        return createAt.format(formatter);
+        return createAt != null ? createAt.format(formatter) : null;
     }
 
     public String getFormattedLastUpdate(){
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm đ/MM/yyyy");
-        return lastUpdate.format(formatter);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy");
+        return lastUpdate != null ? lastUpdate.format(formatter) : null;
     }
 }

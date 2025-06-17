@@ -25,6 +25,11 @@ public class Unit {
     public Unit() {
     }
 
+    public Unit(String id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     public String getId() {
         return id;
     }

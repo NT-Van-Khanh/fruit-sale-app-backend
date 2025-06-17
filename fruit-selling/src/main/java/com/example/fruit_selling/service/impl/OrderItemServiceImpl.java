@@ -8,6 +8,7 @@ import com.example.fruit_selling.model.Product;
 import com.example.fruit_selling.repository.OrderItemRepository;
 import com.example.fruit_selling.repository.ProductRepository;
 import com.example.fruit_selling.service.OrderItemService;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,6 +21,7 @@ public class OrderItemServiceImpl implements OrderItemService {
         this.productRepository = productRepository;
     }
 
+    @Transactional
     @Override
     public void add(OrderItemDTO orderItemDTO, String orderId) {
         OrderItem orderItem = OrderItemMapper.toEntity(orderItemDTO);
@@ -27,6 +29,7 @@ public class OrderItemServiceImpl implements OrderItemService {
                                 .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy sản phẩm với ID: " + orderItemDTO.getProductId()));
         orderItem.setOrder(OrderProduct.builder().id(orderId).build());
         orderItem.setProduct(product);
+        System.err.println(product.getPrice()*orderItemDTO.getQuantity());
         orderItem.setPrice(product.getPrice()*orderItemDTO.getQuantity());
         orderItemRepository.save(orderItem);
     }
