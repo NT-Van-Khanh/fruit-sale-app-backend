@@ -1,6 +1,7 @@
 package com.example.fruit_selling.controller;
 
 import com.example.fruit_selling.dto.ApiResponse;
+import com.example.fruit_selling.dto.EmailRequest;
 import com.example.fruit_selling.dto.OrderDTO;
 import com.example.fruit_selling.dto.OrderResponseDTO;
 import com.example.fruit_selling.service.OrderService;
@@ -25,8 +26,8 @@ public class OrderController {
 
 
     @PostMapping("/verify-email")
-    public ResponseEntity<ApiResponse<String>> sendOtp(@RequestBody String email){
-        orderService.sendOtp(email,orderService.VERIFY,"Mã OTP xác thực tài khoản");
+    public ResponseEntity<ApiResponse<String>> sendOtp(@RequestBody @Valid EmailRequest request){
+        orderService.sendOtp(request.getEmail(),orderService.VERIFY,"Mã OTP xác thực tài khoản");
         return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK,"Vui lòng kiểm tra email để lấy mã OTP"));
     }
 
