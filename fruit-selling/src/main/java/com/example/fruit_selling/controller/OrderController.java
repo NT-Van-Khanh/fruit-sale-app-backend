@@ -18,10 +18,19 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
     @PostMapping("/add")
-    public ResponseEntity<ApiResponse<OrderResponseDTO>> addOrder(@RequestBody @Valid OrderDTO order){
-        ApiResponse<OrderResponseDTO> apiResponse = new ApiResponse<>(HttpStatus.CREATED.value(), "Tạo đơn hàng thành công", orderService.addOrder(order));
+    public ResponseEntity<ApiResponse<OrderResponseDTO>> addOrder(@RequestBody @Valid OrderDTO order,@RequestParam String otp){
+        ApiResponse<OrderResponseDTO> apiResponse = new ApiResponse<>(HttpStatus.CREATED.value(), "Tạo đơn hàng thành công", orderService.addOrder(order, otp));
         return ResponseEntity.status(HttpStatus.CREATED).body(apiResponse);
     }
+
+
+    @PostMapping("/verify-email")
+    public ResponseEntity<ApiResponse<String>> sendOtp(@RequestBody String email){
+        orderService.sendOtp(email,orderService.VERIFY,"Mã OTP xác thực tài khoản");
+        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK,"Vui lòng kiểm tra email để lấy mã OTP"));
+    }
+
+
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<OrderResponseDTO>> getOrder(@PathVariable String id){
         return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, orderService.getOrderById(id)));

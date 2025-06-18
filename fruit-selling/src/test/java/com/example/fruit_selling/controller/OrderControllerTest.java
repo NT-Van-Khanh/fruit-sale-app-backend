@@ -61,12 +61,13 @@ class OrderControllerTest {
         mockResponse.setId("ORD001");
         mockResponse.setTotalCost(150000L);
         mockResponse.setLastUpdate(LocalDateTime.now());
-        Mockito.when(orderService.addOrder(Mockito.any(OrderDTO.class)))
+        Mockito.when(orderService.addOrder(Mockito.any(OrderDTO.class),Mockito.eq("022233")))
                 .thenReturn(mockResponse);
 
         mockMvc.perform(post("/api/orders/add")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
+                        .param("otp", "022233")
                         .content(objectMapper.writeValueAsString(orderDTO)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.data.id").value("ORD001"))
