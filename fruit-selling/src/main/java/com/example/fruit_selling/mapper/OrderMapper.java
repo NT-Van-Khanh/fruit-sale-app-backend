@@ -11,11 +11,10 @@ import java.util.stream.Collectors;
 
 public class OrderMapper {
     public static OrderProduct toOrder(OrderDTO dto){
-        Collection<OrderItem> orderItems =dto.getItems().stream().map(OrderItemMapper::toEntity)
-                .collect(Collectors.toCollection(ArrayList::new));
+//        Collection<OrderItem> orderItems =dto.getItems().stream().map(OrderItemMapper::toEntity)
+//                .collect(Collectors.toCollection(ArrayList::new));
         return OrderProduct.builder()
                 .customer(CustomerMapper.toEntity(dto.getCustomer()))
-                .items(orderItems)
                 .address(dto.getAddress())
                 .totalCost(dto.getTotalCost())
                 .note(dto.getNote())

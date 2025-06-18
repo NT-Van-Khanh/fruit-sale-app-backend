@@ -4,11 +4,15 @@ import com.example.fruit_selling.dto.OrderDTO;
 import com.example.fruit_selling.dto.OrderItemDTO;
 import com.example.fruit_selling.dto.OrderResponseDTO;
 import com.example.fruit_selling.dto.PageResponse;
+import com.example.fruit_selling.exception.ResourceNotFoundException;
+import com.example.fruit_selling.mapper.OrderItemMapper;
 import com.example.fruit_selling.mapper.OrderMapper;
 import com.example.fruit_selling.model.Customer;
 import com.example.fruit_selling.model.OrderItem;
 import com.example.fruit_selling.model.OrderProduct;
+import com.example.fruit_selling.model.Product;
 import com.example.fruit_selling.repository.OrderRepository;
+import com.example.fruit_selling.repository.ProductRepository;
 import com.example.fruit_selling.service.*;
 import jakarta.transaction.Transactional;
 import org.hibernate.query.Order;
@@ -34,16 +38,18 @@ public class OrderServiceImpl implements OrderService {
     private final RedisService redisService;
 
     private final OrderRepository orderRepository;
+    private final ProductRepository productRepository;
     private final OrderItemService orderItemService;
     private final CustomerService customerService;
     public OrderServiceImpl(EmailService emailService,
                             RedisService redisService,
-                            OrderRepository orderRepository,
+                            OrderRepository orderRepository, ProductRepository productRepository,
                             OrderItemService orderItemService,
                             CustomerService customerService) {
         this.emailService = emailService;
         this.redisService = redisService;
         this.orderRepository = orderRepository;
+        this.productRepository = productRepository;
         this.orderItemService = orderItemService;
         this.customerService = customerService;
     }
@@ -69,18 +75,20 @@ public class OrderServiceImpl implements OrderService {
         if (orderDTO.getItems() == null || orderDTO.getItems().isEmpty()) {
             throw new IllegalArgumentException("Đơn hàng phải có ít nhất một sản phẩm.");
         }
-
         Customer customer = customerService.addOrGetExisting(orderDTO.getCustomer());
-
         OrderProduct order = OrderMapper.toOrder(orderDTO);
         order.setId(generateOrderId());
         order.setCustomer(customer);
-        order.setItems(new ArrayList<>());
-        order = orderRepository.save(order);
-
+        List<OrderItem> orderItem = new ArrayList<>();
         for(OrderItemDTO item : orderDTO.getItems()){
-           orderItemService.add(item, order.getId());
+            Product p = productRepository.findById(item.getProductId())
+                    .orElseThrow(() -> new ResourceNotFoundException(String.format("Sản phẩm %s không tồn tại!",item.getProductId())));
+            OrderItem orderItemEntity = OrderItemMapper.toEntity(item, p.getPrice());
+            orderItemEntity.setOrder(order);
+            orderItem.add(orderItemEntity);
         }
+        order.setItems(orderItem);
+        order = orderRepository.save(order);
         redisService.deleteOtp(orderDTO.getCustomer().getEmail(), "VERIFY");
         return getOrderById(order.getId());
     }

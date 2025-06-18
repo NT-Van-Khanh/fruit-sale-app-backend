@@ -24,13 +24,13 @@ public class OrderItemServiceImpl implements OrderItemService {
     @Transactional
     @Override
     public void add(OrderItemDTO orderItemDTO, String orderId) {
-        OrderItem orderItem = OrderItemMapper.toEntity(orderItemDTO);
-        Product product = productRepository.findById(orderItemDTO.getProductId())
-                                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy sản phẩm với ID: " + orderItemDTO.getProductId()));
-        orderItem.setOrder(OrderProduct.builder().id(orderId).build());
-        orderItem.setProduct(product);
-        System.err.println(product.getPrice()*orderItemDTO.getQuantity());
-        orderItem.setPrice(product.getPrice()*orderItemDTO.getQuantity());
-        orderItemRepository.save(orderItem);
+//        OrderItem orderItem = OrderItemMapper.toEntity(orderItemDTO);
+//        Product product = productRepository.findById(orderItemDTO.getProductId())
+//                                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy sản phẩm với ID: " + orderItemDTO.getProductId()));
+//        orderItem.setOrder(OrderProduct.builder().id(orderId).build());
+//        orderItem.setProduct(product);
+//        System.err.println(product.getPrice()*orderItemDTO.getQuantity());
+//        orderItem.setPrice(product.getPrice()*orderItemDTO.getQuantity());
+//        orderItemRepository.save(orderItem);
     }
 }

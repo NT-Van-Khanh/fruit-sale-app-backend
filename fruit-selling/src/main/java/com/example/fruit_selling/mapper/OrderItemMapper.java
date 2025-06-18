@@ -7,10 +7,11 @@ import com.example.fruit_selling.model.OrderItem;
 import com.example.fruit_selling.model.Product;
 
 public class OrderItemMapper {
-    public static OrderItem toEntity(OrderItemDTO dto){
+    public static OrderItem toEntity(OrderItemDTO dto, Long price){
         return OrderItem.builder()
                 .product(new Product(dto.getProductId()))
                 .quantity(dto.getQuantity())
+                .price(price)
                 .build();
     }
 
